@@ -311,16 +311,16 @@ for i = 1:repeats
         yphys_stimScope('Post_Callback');
     end
 end
-[FileName,PathName] = uiputfile('sag_peak_steady.csv');
+[FileName,PathName] = uiputfile('sag_peak_steady.xls');
 if ~ischar(FileName)
     return
 end
-fid = fopen(fullfile(PathName,FileName),'w');
-fclose(fid);
+% fid = fopen(fullfile(PathName,FileName),'w');
+% fclose(fid);
 
 titles = {'SAG', 'PeakAmp', 'SteadyAmp', 'PeakRaw', 'SteadyRaw', 'BaselineRaw'};
 data = num2cell([sag, peakAmp, steadyAmp, peakRaw, steadyRaw, baseline]);
-xlswrite(fullfile(PathName,FileName),[titles,data]);
+xlswrite(fullfile(PathName,FileName),[titles;data]);
 
 
 function numFilesED_Callback(hObject, eventdata, handles)

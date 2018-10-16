@@ -273,12 +273,17 @@ function measureSAG_Callback(hObject, eventdata, handles)
 % hObject    handle to measureSAG (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-c = str2num(get(handles.numFilesED,'String'));
-if isempty(c)
-    repeats = 1;
-else
-    repeats = c;
+numFileStr = get(handles.numFilesED,'String');
+indexGroups = strsplit(numFileStr,',');
+indices = [];
+for i = 1:length(indexGroups)
+    indices = [indices, eval(indexGroups{i})];
 end
+if isempty(indices)
+	fprintf('Input file indices. e.g. 23:45, 101, 20\n');
+    return
+end
+
 sag = zeros(repeats,1);
 steadyAmp = zeros(repeats,1);
 peakAmp = zeros(repeats,1);
@@ -287,7 +292,10 @@ steadyRaw = zeros(repeats,1);
 baseline = zeros(repeats,1);
 
 
-for i = 1:repeats
+for i = 1:length(indices)
+    ind = indices(i);
+    setFileByNum(ind);
+    pause(.1);
     [~,allLines] = findFig;
     rect = get(handles.selectPeakPB,'UserData');
     calcPeak(allLines, rect, handles);
@@ -306,10 +314,10 @@ for i = 1:repeats
     set(handles.sagTX,'String',num2str(sag(i)));
     drawnow();
     fprintf('\nSAG: %.2f\n',sag(i));
-    pause(.1);
-    if i~= repeats
-        yphys_stimScope('Post_Callback');
-    end
+%     pause(.1);
+%     if i~= repeats
+%         yphys_stimScope('Post_Callback');
+%     end
 end
 [FileName,PathName] = uiputfile('sag_peak_steady.xls');
 if ~ischar(FileName)
@@ -321,6 +329,20 @@ end
 titles = {'SAG', 'PeakAmp', 'SteadyAmp', 'PeakRaw', 'SteadyRaw', 'BaselineRaw'};
 data = num2cell([sag, peakAmp, steadyAmp, peakRaw, steadyRaw, baseline]);
 xlswrite(fullfile(PathName,FileName),[titles;data]);
+
+function setFileByNum(ind)
+global yphys
+indchar = num2str(ind);
+if isfield(yphys, 'filename')
+    [pathstr,filenamestr,extstr] = fileparts(yphys.filename);
+        for i=1:3-length(indchar)
+            indchar = ['0', indchar];
+        end
+		filenamestr = ['yphys', indchar];
+end
+if exist([pathstr, '\', filenamestr, extstr])
+    yphys_loadYphys([pathstr, '\', filenamestr, extstr]);
+end
 
 
 function numFilesED_Callback(hObject, eventdata, handles)

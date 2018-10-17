@@ -283,6 +283,7 @@ if isempty(indices)
 	fprintf('Input file indices. e.g. 23:45, 101, 20\n');
     return
 end
+repeats = length(indices);
 
 sag = zeros(repeats,1);
 steadyAmp = zeros(repeats,1);
@@ -292,7 +293,7 @@ steadyRaw = zeros(repeats,1);
 baseline = zeros(repeats,1);
 
 
-for i = 1:length(indices)
+for i = 1:repeats
     ind = indices(i);
     setFileByNum(ind);
     pause(.1);

@@ -329,6 +329,9 @@ end
 
 titles = {'SAG', 'PeakAmp', 'SteadyAmp', 'PeakRaw', 'SteadyRaw', 'BaselineRaw'};
 data = num2cell([sag, peakAmp, steadyAmp, peakRaw, steadyRaw, baseline]);
+if exist(fullfile(PathName,FileName)) == 2
+    delete(fullfile(PathName,FileName));
+end
 xlswrite(fullfile(PathName,FileName),[titles;data]);
 
 function setFileByNum(ind)

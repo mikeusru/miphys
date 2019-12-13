@@ -402,14 +402,13 @@ if isnumeric(file)
 end
 if ~iscell(file)
     file = {file};
-    path = {path};
 end
 
 for i = 1:length(file)
-    filePath = fullfile(path{i}, file{i});
+    filePath = fullfile(path, file{i});
     [~, baseFileName, ~] = fileparts(file{i});
     newFileName = [baseFileName, '.mat'];
-    newFilePath = fullfile(path{i}, newFileName);
+    newFilePath = fullfile(path, newFileName);
     FLIMstruct = convertBaseNameTextFile(filePath);
     fprintf('\nSaving %s to %s', file{i},  newFilePath);
     save(newFilePath, 'FLIMstruct');

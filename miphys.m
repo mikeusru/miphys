@@ -410,7 +410,7 @@ for i = 1:length(file)
     newFileName = [baseFileName, '.mat'];
     newFilePath = fullfile(path, newFileName);
     FLIMstruct = convertBaseNameTextFile(filePath);
-    fprintf('\nSaving %s to %s', file{i},  newFilePath);
+    fprintf('\nConverting %s to %s', file{i},  newFilePath);
     save(newFilePath, 'FLIMstruct');
 end
 fprintf('\n');

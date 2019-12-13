@@ -16,10 +16,13 @@ for i = 1:length(C{1})
 end
 
 dataInd = find(~cellfun(@isempty, strfind(remainingCells,'Data')));
-x = cell2mat(textscan(remainingCells{dataInd+1}, '%f32', 'delimiter', ','));
-y = cell2mat(textscan(remainingCells{dataInd+2}, '%f32', 'delimiter', ','));
+newStruct.data1 = cell2mat(textscan(remainingCells{dataInd+1}, '%f32', 'delimiter', ','));
+newStruct.data2 = cell2mat(textscan(remainingCells{dataInd+2}, '%f32', 'delimiter', ','));
 
-newStruct.data = [x,y];
+t = [1/newStruct.outputRate:1/newStruct.outputRate:length(newStruct.data1)/newStruct.outputRate]';
+newStruct.data1 = [t, newStruct.data1];
+newStruct.data2 = [t, newStruct.data2];
+
 
 function output = stringToNumberIfNumber(str)
 output = str;

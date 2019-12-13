@@ -22,7 +22,7 @@ function varargout = miphys(varargin)
 
 % Edit the above text to modify the response to help miphys
 
-% Last Modified by GUIDE v2.5 04-Oct-2017 12:51:43
+% Last Modified by GUIDE v2.5 13-Dec-2019 13:22:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -389,3 +389,30 @@ set(c,'units','normalized');
 set(c,'position',[.1,.1,.8,.8]);
 s = sprintf('SAG MEASUREMENT: \n\n1. Navigate to the first file in stimScope.\n\n2. in MiPhys, enter the steady state time\n\n3. Click “select peak”, select the peak\n\n4. Click ”select baseline”, select baseline.\n\n5. put in the amount of files you have\n\n6. Click Measure Sag.\n\nAt the end it will ask you to save the csv file which has all the sag measurements.');
 set(c,'string',s);
+
+
+% --- Executes on button press in convertFlimageTextFilesPB.
+function convertFlimageTextFilesPB_Callback(hObject, eventdata, handles)
+% hObject    handle to convertFlimageTextFilesPB (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[file, path] = uigetfile('*.txt', 'MultiSelect', 'on');
+if isnumeric(file)
+    return
+end
+if ~iscell(file)
+    file = {file};
+    path = {path};
+end
+
+for i = 1:length(file)
+    filePath = fullfile(path{i}, file{i});
+    [~, baseFileName, ~] = fileparts(file{i});
+    newFileName = [baseFileName, '.mat'];
+    newFilePath = fullfile(path{i}, newFileName);
+    FLIMstruct = convertBaseNameTextFile(filePath);
+    fprintf('\nSaving %s to %s', file{i},  newFilePath);
+    save(newFilePath, 'FLIMstruct');
+end
+fprintf('\n');
+    

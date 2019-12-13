@@ -1,6 +1,6 @@
 function newStruct = convertBaseNameTextFile(path)
-filename = 'TestFiles/BaseName027.txt';
-fid = fopen(filename);
+% filename = 'TestFiles/BaseName027.txt';
+fid = fopen(path);
 C = textscan(fid, '%s %s', 'delimiter', '=');
 fclose(fid);
 
